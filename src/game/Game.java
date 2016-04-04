@@ -1,5 +1,6 @@
 package game;
 
+import ImageLoader.Assets;
 import ImageLoader.SpriteSheet;
 import ImageLoader.gfx;
 import display.Display;
@@ -38,6 +39,7 @@ public class Game implements Runnable {
         //Initializing a new Display
         this.display = new Display(title, width, height);
         this.background = new SpriteSheet(gfx.loader("/images/RoadTile3.png"));
+        Assets.init();
     }
     // Method for updating all the variables in the game
     private void tick() {
@@ -64,6 +66,10 @@ public class Game implements Runnable {
         graphics= this.bufferStrategy.getDrawGraphics();
         //Create and draw the animated background
         this.graphics.drawImage(this.background.crop(0, 0+this.i*this.height , width, height), 0, 0, null);
+        //Player Added
+        this.graphics.drawImage(Assets.player, 620, 420, null);
+        //Enemy Added(for test)
+        this.graphics.drawImage(Assets.enemy, 480, 420, null);
         //Enables the buffer
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
