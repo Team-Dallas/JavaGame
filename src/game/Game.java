@@ -4,6 +4,9 @@ import ImageLoader.Assets;
 import ImageLoader.SpriteSheet;
 import ImageLoader.gfx;
 import display.Display;
+import states.GameState;
+import states.State;
+import states.StateManager;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -18,10 +21,16 @@ public class Game implements Runnable {
     private boolean isRunning;
 
     private Display display;
+    private InputHandler inputHandler;
     private BufferStrategy bufferStrategy;
     private Graphics graphics;
     private SpriteSheet background;
     private int i;
+
+    public static Player player;
+    public static Rectangle enemy;
+
+    private State gameState;
 
     public Game(String title, int width, int height) {
         this.title = title;
@@ -39,14 +48,25 @@ public class Game implements Runnable {
         //Initializing a new Display
         this.display = new Display(title, width, height);
         this.background = new SpriteSheet(gfx.loader("/images/RoadTile3.png"));
+
+        this.inputHandler = new InputHandler(this.display);
         Assets.init();
+
+        gameState = new GameState();
+        StateManager.setState(gameState);
+
+        player = new Player();
     }
     // Method for updating all the variables in the game
     private void tick() {
+        //if (StateManager.getState() != null) {
+        //    StateManager.getState().tick();
+        //}
         this.i--;
         if (this.i == 0){
             this.i = 23;
         }
+        player.tick();
     }
     //Method for drawing everything on the canvas
     private void render() throws IOException {
@@ -54,12 +74,12 @@ public class Game implements Runnable {
         boolean isFirstBckg = true;
         //Setting the bufferStrategy to be the one used in our canvas.
         //Gets the number of buffers that the canvas should use.
-        this.bufferStrategy = this.display.getCanvas().getBufferStrategy();
+        this.bufferStrategy = display.getCanvas().getBufferStrategy();
         //If our bufferStrategy doesn't know how many buffers to use
         //we create some manually
         if (bufferStrategy == null) {
             //Create 2 buffers and then return out of the method to prevent errors
-            this.display.getCanvas().createBufferStrategy(2);
+            display.getCanvas().createBufferStrategy(2);
             return;
         }
         //Create the graphics related to the bufferStrategy
@@ -67,38 +87,50 @@ public class Game implements Runnable {
         //Create and draw the animated background
         this.graphics.drawImage(this.background.crop(0, 0+this.i*this.height , width, height), 0, 0, null);
         //Player Added
-        this.graphics.drawImage(Assets.player, 620, 420, null);
+        player.render(graphics);
         //Enemy Added(for test)
-        this.graphics.drawImage(Assets.enemy, 480, 420, null);
+       // this.graphics.drawImage(Assets.enemy, 480, 420, null);
         //Enables the buffer
+        //if (StateManager.getState() != null){
+        //    StateManager.getState().render(this.graphics);
+        //}
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
-        graphics.dispose();
+        this.graphics.dispose();
     }
     //Implementing the interface's method
     @Override
     public void run() {
         try {
-            init();
+            this.init();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        int fps = 50;
+        double ticksperFrame = 1_000_000_000 / fps;
+        double delta = 0;
+        long now;
+        long lastTimeTicked = System.nanoTime();
 
         while (isRunning) {
-            try {
-                thread.sleep(13);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            now = System.nanoTime();
+            delta += (now - lastTimeTicked) / ticksperFrame;
+            lastTimeTicked = now;
+            if(delta >= 1){
+                tick();
+                try {
+                    render();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                delta--;
+
             }
-            tick();
-            try {
-                render();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+
         }
         //Calls the stop method to stop everything
-        stop();
+        this.stop();
     }
 
     //Creating a start method for the Thread to start our game
