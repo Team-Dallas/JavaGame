@@ -40,8 +40,6 @@ public class Display extends Canvas {
         this.frame = new JFrame(this.title);
         this.frame.setSize(this.width, this.height);
         this.frame.setVisible(true);
-        this.frame.setFocusable(true);
-        this.frame.requestFocusInWindow();
         this.frame.setResizable(false);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLocationRelativeTo(null);
@@ -50,6 +48,7 @@ public class Display extends Canvas {
         this.canvas.setPreferredSize(dimensions);
         this.canvas.setMaximumSize(dimensions);
         this.canvas.setMinimumSize(dimensions);
+        this.canvas.setFocusable(true);
         //Adding the canvas to the frame and then pack it together
         this.frame.add(canvas);
         this.frame.pack();
