@@ -1,5 +1,7 @@
 package display;
 
+import game.InputHandler;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -39,6 +41,7 @@ public class Display extends Canvas {
         this.frame.setSize(this.width, this.height);
         this.frame.setVisible(true);
         this.frame.setFocusable(true);
+        this.frame.requestFocusInWindow();
         this.frame.setResizable(false);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLocationRelativeTo(null);

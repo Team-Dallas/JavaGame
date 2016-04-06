@@ -59,15 +59,16 @@ public class Game implements Runnable {
     }
     // Method for updating all the variables in the game
     private void tick() {
-        //if (StateManager.getState() != null) {
-        //    StateManager.getState().tick();
-        //}
+        if (StateManager.getState() != null) {
+            StateManager.getState().tick();
+        }
         this.i--;
-        if (this.i == 0){
+        if (this.i == 0) {
             this.i = 23;
         }
         player.tick();
     }
+
     //Method for drawing everything on the canvas
     private void render() throws IOException {
         // Bool is for determing wich background to draw.
@@ -91,9 +92,9 @@ public class Game implements Runnable {
         //Enemy Added(for test)
        // this.graphics.drawImage(Assets.enemy, 480, 420, null);
         //Enables the buffer
-        //if (StateManager.getState() != null){
-        //    StateManager.getState().render(this.graphics);
-        //}
+        if (StateManager.getState() != null){
+            StateManager.getState().render(this.graphics);
+        }
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
         this.graphics.dispose();
