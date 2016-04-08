@@ -11,6 +11,7 @@ import states.StateManager;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Game implements Runnable {
     private String title;
@@ -26,8 +27,12 @@ public class Game implements Runnable {
     private Graphics graphics;
     private SpriteSheet background;
     private int i;
+    private long time = System.nanoTime();
+    private long delay;
+    private ArrayList<Enemy> enemies;
 
     public static Player player;
+
     public static Rectangle enemy;
 
     private State gameState;
@@ -38,6 +43,7 @@ public class Game implements Runnable {
         this.height = height;
         this.isRunning = false;
         this.i = 23;
+        this.delay = 2000;
     }
 
     /**
@@ -56,6 +62,7 @@ public class Game implements Runnable {
         StateManager.setState(gameState);
 
         player = new Player();
+        enemies = new ArrayList<Enemy>();
     }
     // Method for updating all the variables in the game
     private void tick() {
@@ -67,6 +74,17 @@ public class Game implements Runnable {
             this.i = 23;
         }
         player.tick();
+        long elapsed = (System.nanoTime() - time) / 1000000 ;
+
+        if(elapsed > this.delay){
+
+            enemies.add(new Enemy());
+            time = System.nanoTime();
+        }
+
+        for (int j = 0; j < enemies.size(); j++) {
+             enemies.get(j).tick();
+        }
     }
 
     //Method for drawing everything on the canvas
@@ -84,14 +102,17 @@ public class Game implements Runnable {
             return;
         }
         //Create the graphics related to the bufferStrategy
-        graphics= this.bufferStrategy.getDrawGraphics();
+        this.graphics= this.bufferStrategy.getDrawGraphics();
         //Create and draw the animated background
         this.graphics.drawImage(this.background.crop(0, 0+this.i*this.height , width, height), 0, 0, null);
         //Player Added
-        player.render(graphics);
+        player.render(this.graphics);
         //Enemy Added(for test)
        // this.graphics.drawImage(Assets.enemy, 480, 420, null);
         //Enables the buffer
+        for (int j = 0; j < enemies.size(); j++) {
+            enemies.get(j).render(this.graphics);
+        }
         if (StateManager.getState() != null){
             StateManager.getState().render(this.graphics);
         }
