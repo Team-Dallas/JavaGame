@@ -77,7 +77,6 @@ public class Game implements Runnable {
         long elapsed = (System.nanoTime() - time) / 2000000 ;
 
         if(elapsed > this.delay){
-
             enemies.add(new Enemy());
             time = System.nanoTime();
         }
