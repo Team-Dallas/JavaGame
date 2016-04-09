@@ -12,8 +12,8 @@ public class Assets {
         try {
             SpriteSheet spriteSheet = new SpriteSheet(gfx.loader("/cars/carsSpriteSheet.png"));
 
-            player = spriteSheet.crop(0, 0, 105, 106);
-            enemy = spriteSheet.crop(105, 2*106, 105, 106 );
+            player = spriteSheet.crop(0, 0, 100, 200);
+            enemy = spriteSheet.crop(100, 2*200, 100, 200);
         } catch (IOException e) {
             e.printStackTrace();
         }
