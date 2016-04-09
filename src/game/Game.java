@@ -74,9 +74,10 @@ public class Game implements Runnable {
             this.i = 23;
         }
         player.tick();
-        long elapsed = (System.nanoTime() - time) / 2000000 ;
+        long elapsed = (System.nanoTime() - time) / 150000 ;
 
         if(elapsed > this.delay){
+
             enemies.add(new Enemy());
             time = System.nanoTime();
         }

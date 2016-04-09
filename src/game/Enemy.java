@@ -1,22 +1,38 @@
 package game;
 
 import ImageLoader.Assets;
+import display.Display;
 
 import java.awt.*;
-import java.util.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Enemy {
     private int x, y;
     private int velocity;
-    private final int[] spawnPoints = {85, 260, 435, 610};
     private Random rand;
+    private final ArrayList<Integer> SPAWN_POINTS = new ArrayList<Integer>()
+    {{  add(85);
+        add(260);
+        add(435);
+        add(610);
+    }};
+    private boolean[] checkOccupiedSpawnPoints;
+    private BufferedImage enemy;
+
 
     public Enemy() {
         this.rand = new Random();
-        this.x = this.spawnPoints[this.rand.nextInt(4)];
+        checkOccupiedSpawnPoints = new boolean[4];
+        this.x = this.SPAWN_POINTS.get(this.rand.nextInt(4));
+        while(checkOccupiedSpawnPoints[SPAWN_POINTS.indexOf(this.x)]){
+            this.x = this.SPAWN_POINTS.get(this.rand.nextInt(4));
+        }
+        this.checkOccupiedSpawnPoints[SPAWN_POINTS.indexOf(this.x)] = true;
         this.y = -200;
-        this.velocity = 2;
-        Array
+        this.velocity = 10;
     }
 
 
@@ -24,8 +40,11 @@ public class Enemy {
 
         this.y += this.velocity;
     }
-
     public void render(Graphics g) {
-        g.drawImage(Assets.enemy, this.x, this.y, null);
+        int allEnemiesCount = Assets.getAllEnimies().size();
+        if(this.y == -200 + this.velocity){
+          enemy = Assets.getAllEnimies().get(this.rand.nextInt(allEnemiesCount));
+        }
+        g.drawImage(enemy, this.x, this.y, null);
     }
 }
