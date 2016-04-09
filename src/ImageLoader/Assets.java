@@ -16,25 +16,22 @@ public class Assets {
         return allEnimies;
     }
 
-    public static void init(){
+    public static void init() {
         try {
             SpriteSheet spriteSheet = new SpriteSheet(gfx.loader("/cars/carsSpriteSheet.png"));
             rand = new Random();
-            allEnimies = new ArrayList<BufferedImage>();
-
+            allEnimies = new ArrayList<>();
             player = spriteSheet.crop(0, 0, 100, 200);
             enemy = spriteSheet.crop(100, 0, 100, 200);
-            allEnimies.add(enemy);
             taxi = spriteSheet.crop(500, 0, 100, 200);
-            allEnimies.add(taxi);
             pickUp = spriteSheet.crop(300, 0, 100, 200);
-            allEnimies.add(pickUp);
             camaro = spriteSheet.crop(200, 0, 100, 200);
-            allEnimies.add(camaro);
             bus = spriteSheet.crop(400, 0, 100, 200);
+            allEnimies.add(enemy);
+            allEnimies.add(taxi);
+            allEnimies.add(pickUp);
+            allEnimies.add(camaro);
             allEnimies.add(bus);
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
