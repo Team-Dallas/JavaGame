@@ -54,7 +54,6 @@ public class Game implements Runnable {
         //Initializing a new Display
         this.display = new Display(title, width, height);
         this.background = new SpriteSheet(gfx.loader("/images/RoadTile3.png"));
-
         this.inputHandler = new InputHandler(this.display);
         Assets.init();
 
@@ -64,6 +63,7 @@ public class Game implements Runnable {
         player = new Player();
         enemies = new ArrayList<Enemy>();
     }
+
     // Method for updating all the variables in the game
     private void tick() {
         if (StateManager.getState() != null) {
@@ -74,16 +74,16 @@ public class Game implements Runnable {
             this.i = 23;
         }
         player.tick();
-        long elapsed = (System.nanoTime() - time) / 150000 ;
+        long elapsed = (System.nanoTime() - time) / 150000;
 
-        if(elapsed > this.delay){
-
+        if (elapsed > this.delay && (!Road.getOccupiedSpawnPoints()[0] || !Road.getOccupiedSpawnPoints()[1] ||
+                !Road.getOccupiedSpawnPoints()[2] || !Road.getOccupiedSpawnPoints()[3])) {
             enemies.add(new Enemy());
             time = System.nanoTime();
         }
 
         for (int j = 0; j < enemies.size(); j++) {
-             enemies.get(j).tick();
+            enemies.get(j).tick();
         }
     }
 
@@ -102,24 +102,25 @@ public class Game implements Runnable {
             return;
         }
         //Create the graphics related to the bufferStrategy
-        this.graphics= this.bufferStrategy.getDrawGraphics();
+        this.graphics = this.bufferStrategy.getDrawGraphics();
         //Create and draw the animated background
-        this.graphics.drawImage(this.background.crop(0, 0+this.i*this.height , width, height), 0, 0, null);
+        this.graphics.drawImage(this.background.crop(0, 0 + this.i * this.height, width, height), 0, 0, null);
         //Player Added
         player.render(this.graphics);
         //Enemy Added(for test)
-       // this.graphics.drawImage(Assets.enemy, 480, 420, null);
+        // this.graphics.drawImage(Assets.enemy, 480, 420, null);
         //Enables the buffer
         for (int j = 0; j < enemies.size(); j++) {
             enemies.get(j).render(this.graphics);
         }
-        if (StateManager.getState() != null){
+        if (StateManager.getState() != null) {
             StateManager.getState().render(this.graphics);
         }
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
         this.graphics.dispose();
     }
+
     //Implementing the interface's method
     @Override
     public void run() {
@@ -138,7 +139,7 @@ public class Game implements Runnable {
             now = System.nanoTime();
             delta += (now - lastTimeTicked) / ticksperFrame;
             lastTimeTicked = now;
-            if(delta >= 1){
+            if (delta >= 1) {
                 tick();
                 try {
                     render();

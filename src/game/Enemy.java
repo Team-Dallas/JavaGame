@@ -14,22 +14,14 @@ public class Enemy {
     private int velocity;
     private Random rand;
     private int randomIndex;
-    private final ArrayList<Integer> SPAWN_POINTS = new ArrayList<Integer>() {{
-        add(85);
-        add(260);
-        add(435);
-        add(610);
-    }};
-    private final boolean[] occupiedSpawnPoints;
     private BufferedImage enemy;
 
 
     public Enemy() {
         this.rand = new Random();
-        this.occupiedSpawnPoints = new boolean[4];
         setRandomIndex(this.rand.nextInt(4));
-        this.x = this.SPAWN_POINTS.get(randomIndex);
-        this.occupiedSpawnPoints[randomIndex] = true;
+        this.x = Road.getSpawnPoints().get(this.randomIndex);
+        Road.getOccupiedSpawnPoints()[this.randomIndex] = true;
         this.y = -200;
         this.velocity = 10;
     }
@@ -38,7 +30,7 @@ public class Enemy {
         do {
             this.randomIndex = this.rand.nextInt(4);
         }
-        while(this.occupiedSpawnPoints[randomIndex]);
+        while (Road.getOccupiedSpawnPoints()[this.randomIndex]);
     }
 
     public void tick() {
@@ -48,6 +40,9 @@ public class Enemy {
 
     public void render(Graphics g) {
         int allEnemiesCount = Assets.getAllEnimies().size();
+        if (this.y == 600) {
+            Road.getOccupiedSpawnPoints()[Road.getSpawnPoints().indexOf(this.x)] = false;
+        }
         if (this.y == -200 + this.velocity) {
             enemy = Assets.getAllEnimies().get(this.rand.nextInt(allEnemiesCount));
         }
