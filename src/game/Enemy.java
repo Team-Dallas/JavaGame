@@ -1,12 +1,10 @@
 package game;
 
+import Constants.Const;
 import ImageLoader.Assets;
-import display.Display;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Enemy {
@@ -20,10 +18,10 @@ public class Enemy {
     public Enemy() {
         this.rand = new Random();
         setRandomIndex(this.rand.nextInt(4));
-        this.x = Road.getSpawnPoints().get(this.randomIndex);
-        Road.getOccupiedSpawnPoints()[this.randomIndex] = true;
-        this.y = -200;
-        this.velocity = 10;
+        this.x = Const.SPAWN_POINTS.get(this.randomIndex);
+        Road.getOccupiedSpawnPoints()[randomIndex] = true;
+        this.y = Const.ENEMY_START_POINT_Y;
+        this.velocity = Const.ENEMY_VELOCITY;
     }
 
     public void setRandomIndex(int randomIndex) {
@@ -39,12 +37,12 @@ public class Enemy {
     }
 
     public void render(Graphics g) {
-        int allEnemiesCount = Assets.getAllEnimies().size();
-        if (this.y == 600) {
-            Road.getOccupiedSpawnPoints()[Road.getSpawnPoints().indexOf(this.x)] = false;
+        int allEnemiesCount = Assets.getAllEnemies().size();
+        if (this.y == Const.ENEMY_END_POINT_X) {
+            Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(this.x)] = false;
         }
-        if (this.y == -200 + this.velocity) {
-            enemy = Assets.getAllEnimies().get(this.rand.nextInt(allEnemiesCount));
+        if (this.y == Const.ENEMY_START_POINT_Y + this.velocity) {
+            enemy = Assets.getAllEnemies().get(this.rand.nextInt(allEnemiesCount));
         }
         g.drawImage(enemy, this.x, this.y, null);
     }

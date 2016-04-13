@@ -1,5 +1,6 @@
 package game;
 
+import Constants.Const;
 import ImageLoader.Assets;
 
 import java.awt.*;
@@ -17,11 +18,11 @@ public class Player {
     public static boolean goingRight;
 
     public Player() {
-        this.x = 620;
-        this.y = 420;
-        this.width = 105;
-        this.height = 106;
-        this.velocity = 10;
+        this.x = Const.PLAYER_START_POINT_X;
+        this.y = Const.PLAYER_START_POINT_Y;
+        this.width = Const.PLAYER_WIDTH;
+        this.height = Const.PLAYER_HEIGHT;
+        this.velocity = Const.PLAYER_VELOCITY;
         this.boundingBox = new Rectangle(this.width, this.height);
 
         goingUp = false;
@@ -32,7 +33,7 @@ public class Player {
 
     //Checks if the player intersects with something
     public boolean Intersects(Rectangle r) {
-        if(this.boundingBox.contains(r) || r.contains(this.boundingBox)) {
+        if (this.boundingBox.contains(r) || r.contains(this.boundingBox)) {
             return true;
         }
         return false;
@@ -42,16 +43,16 @@ public class Player {
         //Update the bounding box's position
         this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
 
-        if(goingUp) {
+        if (goingUp && this.y > Const.ROAD_TOP_BORDER) {
             this.y -= this.velocity;
         }
-        if(goingDown) {
+        if (goingDown && this.y < Const.ROAD_BOTTOM_BORDER) {
             this.y += this.velocity;
         }
-        if(goingLeft) {
+        if (goingLeft && this.x > Const.ROAD_LEFT_BORDER) {
             this.x -= this.velocity;
         }
-        if(goingRight) {
+        if (goingRight && this.x < Const.ROAD_RIGHT_BORDER) {
             this.x += this.velocity;
         }
     }
