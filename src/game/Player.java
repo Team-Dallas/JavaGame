@@ -9,6 +9,7 @@ public class Player {
     private int x, y;
     private int velocity;
     private int width, height;
+    private int lives;
 
     private Rectangle boundingBox;
 
@@ -23,7 +24,9 @@ public class Player {
         this.width = Const.PLAYER_WIDTH;
         this.height = Const.PLAYER_HEIGHT;
         this.velocity = Const.PLAYER_VELOCITY;
-        this.boundingBox = new Rectangle(this.width, this.height);
+        this.lives = Const.LIVES;
+        this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
+
 
         goingUp = false;
         goingDown = false;
@@ -31,17 +34,20 @@ public class Player {
         goingRight = false;
     }
 
-    //Checks if the player intersects with something
-    public boolean Collides(Rectangle r) {
-        if (this.boundingBox.contains(r) || r.contains(this.boundingBox)) {
-            return true;
-        }
-        return false;
+    public Rectangle getBoundingBox() {
+        return boundingBox;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public void tick() {
         //Update the bounding box's position
-        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
 
         if (goingUp && this.y > Const.ROAD_TOP_BORDER) {
             this.y -= this.velocity;
@@ -55,6 +61,7 @@ public class Player {
         if (goingRight && this.x < Const.ROAD_RIGHT_BORDER) {
             this.x += this.velocity;
         }
+        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
     }
 
     public void render(Graphics g) {

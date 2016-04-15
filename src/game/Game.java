@@ -67,6 +67,7 @@ public class Game implements Runnable {
 
     // Method for updating all the variables in the game
     private void tick() {
+
         if (StateManager.getState() != null) {
             StateManager.getState().tick();
         }
@@ -74,19 +75,23 @@ public class Game implements Runnable {
         if (this.bckgFrames == 0) {
             this.bckgFrames = Const.TOTAL_BACKGROUND_FRAMES;
         }
+
         player.tick();
         long elapsed = (System.nanoTime() - time) / Const.DRAWING_DELAY;
 
-        if (elapsed > this.delay && Road.isSpotAvailable()) {
+        if (elapsed > this.delay  && Road.isSpotAvailable() ) {
             enemies.add(new Enemy());
             time = System.nanoTime();
         }
-
         for (int j = 0; j < enemies.size(); j++) {
             enemies.get(j).tick();
-        }
-        if (player.Collides(enemy)){
-            System.out.printf("game over");
+            enemy = enemies.get(j).getEnemyRectangle();
+            if(player.getBoundingBox().intersects(enemy)){
+                Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(enemies.get(j).getX())] = false;
+                enemies.remove(j);
+                player.setLives(player.getLives() - 1);
+                System.out.println(player.getLives());
+            }
         }
     }
 

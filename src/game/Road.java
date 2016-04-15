@@ -8,6 +8,10 @@ import java.util.ArrayList;
 public class Road {
     private static boolean[] occupiedSpawnPoints = Const.OCCUPIED_SPAWN_POINTS;
 
+    public static void setOccupiedSpawnPoints(boolean[] occupiedSpawnPoints) {
+        Road.occupiedSpawnPoints = occupiedSpawnPoints;
+    }
+
     public static boolean[] getOccupiedSpawnPoints() {
         return occupiedSpawnPoints;
     }

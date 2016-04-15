@@ -23,11 +23,20 @@ public class Enemy {
         this.x = Const.SPAWN_POINTS.get(this.randomIndex);
         Road.getOccupiedSpawnPoints()[randomIndex] = true;
         this.y = Const.ENEMY_START_POINT_Y;
-        this.velocity = Const.ENEMY_VELOCITY;
         this.width = Const.ENEMY_WIDTH;
         this.height = Const.ENEMY_HEIGHT;
+        this.velocity = Const.ENEMY_VELOCITY;
         this.enemyRectangle = new Rectangle(this.x, this.y, this.width, this.height);
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public Rectangle getEnemyRectangle() {
+        return this.enemyRectangle;
+    }
+
 
     public void setRandomIndex(int randomIndex) {
         do {
@@ -37,8 +46,8 @@ public class Enemy {
     }
 
     public void tick() {
-
         this.y += this.velocity;
+        this.enemyRectangle.setBounds(this.x, this.y, this.width, this.height);
     }
 
     public void render(Graphics g) {
