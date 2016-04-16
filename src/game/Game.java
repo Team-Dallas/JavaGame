@@ -34,6 +34,11 @@ public class Game implements Runnable {
 
     public static Player player;
 
+    public static boolean isKeyUpOrDownMenu;
+    private static boolean isNewGame;
+    public static boolean isModeSelected;
+    public Menu menu;
+
     public static Rectangle enemy;
 
     private State gameState;
@@ -45,6 +50,10 @@ public class Game implements Runnable {
         this.isRunning = false;
         this.bckgFrames = Const.TOTAL_BACKGROUND_FRAMES;
         this.delay = Const.DELAY;
+        this.isKeyUpOrDownMenu = false;
+        this.isNewGame = true;
+        this.isModeSelected = false;
+        this.menu = new Menu();
     }
 
     /**
@@ -90,7 +99,6 @@ public class Game implements Runnable {
                 Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(enemies.get(j).getX())] = false;
                 enemies.remove(j);
                 player.setLives(player.getLives() - 1);
-                System.out.println(player.getLives());
             }
         }
     }
@@ -143,6 +151,26 @@ public class Game implements Runnable {
         long now;
         long lastTimeTicked = System.nanoTime();
 
+        while (true) {
+            now = System.nanoTime();
+            delta += (now - lastTimeTicked) / ticksPerFrame;
+            lastTimeTicked = now;
+            if (delta > 0) {
+                renderMenu();
+                tick();
+                delta--;
+            }
+            if (isModeSelected) {
+                if (isNewGame) {
+                    isRunning = true;
+                    break;
+                } else {
+                    isRunning = false;
+                    break;
+                }
+            }
+        }
+
         while (isRunning) {
             now = System.nanoTime();
             delta += (now - lastTimeTicked) / ticksPerFrame;
@@ -183,5 +211,38 @@ public class Game implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.exit(0);
+    }
+
+    //Method for the Game menu.
+    private void renderMenu() {
+        this.bufferStrategy = display.getCanvas().getBufferStrategy();
+        if (bufferStrategy == null) {
+            //Create 2 buffers and then return out of the method to prevent errors
+            display.getCanvas().createBufferStrategy(2);
+            return;
+        }
+        this.graphics = this.bufferStrategy.getDrawGraphics();
+
+        this.graphics.drawImage(this.background.crop(0, 0 + this.bckgFrames * this.height, width, height), 0, 0, null);
+        //Logic for the game buttons.
+        if (isNewGame) {
+            if (isKeyUpOrDownMenu) {
+                isNewGame = false;
+                menu.render(graphics,isNewGame);
+            } else {
+                menu.render(graphics,isNewGame);
+            }
+        } else {
+            if (isKeyUpOrDownMenu) {
+                isNewGame = true;
+                menu.render(graphics,isNewGame);
+            } else {
+                menu.render(graphics,isNewGame);
+            }
+        }
+        bufferStrategy.show();
+        //Shows everything stored in the Graphics object
+        this.graphics.dispose();
     }
 }

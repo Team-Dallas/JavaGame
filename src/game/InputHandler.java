@@ -13,7 +13,6 @@ public class InputHandler implements KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
@@ -22,9 +21,11 @@ public class InputHandler implements KeyListener{
 
         if (keyCode == KeyEvent.VK_UP) {
             Game.player.goingUp = true;
+            Game.isKeyUpOrDownMenu = true;
         }
         if (keyCode == KeyEvent.VK_DOWN) {
             Game.player.goingDown = true;
+            Game.isKeyUpOrDownMenu = true;
         }
         if (keyCode == KeyEvent.VK_LEFT) {
             Game.player.goingLeft = true;
@@ -34,6 +35,8 @@ public class InputHandler implements KeyListener{
         }
         if (keyCode == KeyEvent.VK_ESCAPE) {
             System.exit(0);
+        }if (keyCode == KeyEvent.VK_ENTER){
+            Game.isModeSelected = true;
         }
 
     }
@@ -44,15 +47,19 @@ public class InputHandler implements KeyListener{
 
         if (keyCode == KeyEvent.VK_UP) {
             Game.player.goingUp = false;
+            Game.isKeyUpOrDownMenu = false;
         }
         if (keyCode == KeyEvent.VK_DOWN) {
             Game.player.goingDown = false;
+            Game.isKeyUpOrDownMenu = false;
         }
         if (keyCode == KeyEvent.VK_LEFT) {
             Game.player.goingLeft = false;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
             Game.player.goingRight = false;
+        }if (keyCode == KeyEvent.VK_ENTER){
+            Game.isModeSelected = false;
         }
     }
 }
