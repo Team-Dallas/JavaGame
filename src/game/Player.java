@@ -27,11 +27,6 @@ public class Player {
         this.lives = Const.LIVES;
         this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
 
-
-        goingUp = false;
-        goingDown = false;
-        goingLeft = false;
-        goingRight = false;
     }
 
     public Rectangle getBoundingBox() {

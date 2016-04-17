@@ -6,6 +6,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static game.Game.*;
+
 public class InputHandler implements KeyListener{
     public InputHandler(Display display) {
         display.getCanvas().addKeyListener(this);
@@ -20,23 +22,23 @@ public class InputHandler implements KeyListener{
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_UP) {
-            Game.player.goingUp = true;
-            Game.isKeyUpOrDownMenu = true;
+            Player.goingUp = true;
+            Menu.goingUp = true;
         }
         if (keyCode == KeyEvent.VK_DOWN) {
-            Game.player.goingDown = true;
-            Game.isKeyUpOrDownMenu = true;
+            Player.goingDown = true;
+            Menu.goingDown = true;
         }
         if (keyCode == KeyEvent.VK_LEFT) {
-            Game.player.goingLeft = true;
+            Player.goingLeft = true;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
-            Game.player.goingRight = true;
+            Player.goingRight = true;
         }
         if (keyCode == KeyEvent.VK_ESCAPE) {
             System.exit(0);
         }if (keyCode == KeyEvent.VK_ENTER){
-            Game.isModeSelected = true;
+            isModeSelected = true;
         }
 
     }
@@ -46,20 +48,20 @@ public class InputHandler implements KeyListener{
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_UP) {
-            Game.player.goingUp = false;
-            Game.isKeyUpOrDownMenu = false;
+            Player.goingUp = false;
+            Menu.goingUp = false;
         }
         if (keyCode == KeyEvent.VK_DOWN) {
-            Game.player.goingDown = false;
-            Game.isKeyUpOrDownMenu = false;
+            Player.goingDown = false;
+            Menu.goingDown = false;
         }
         if (keyCode == KeyEvent.VK_LEFT) {
-            Game.player.goingLeft = false;
+            Player.goingLeft = false;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
-            Game.player.goingRight = false;
+            Player.goingRight = false;
         }if (keyCode == KeyEvent.VK_ENTER){
-            Game.isModeSelected = false;
+            isModeSelected = false;
         }
     }
 }

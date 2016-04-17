@@ -27,31 +27,35 @@ public class Game implements Runnable {
     private BufferStrategy bufferStrategy;
     private Graphics graphics;
     private SpriteSheet background;
-    private int bckgFrames;
+    private int backgroundFrames;
     private long time = System.nanoTime();
     private long delay;
-    private ArrayList<Enemy> enemies;
 
     public static Player player;
-
-    public static boolean isKeyUpOrDownMenu;
-    private static boolean isNewGame;
+    private ArrayList<Enemy> enemies;
+    private static Rectangle enemyBoundingBox;
+    //Check if you are in the menu and what field is pressed
+    public static boolean inMenu;
     public static boolean isModeSelected;
-    public Menu menu;
-
-    public static Rectangle enemy;
+    public static Menu menu;
 
     private State gameState;
 
+    /**
+     * Constructor for creating new game with param
+     *
+     * @param title  of the game
+     * @param width  of the game
+     * @param height of the game
+     */
     public Game(String title, int width, int height) {
         this.title = title;
         this.width = width;
         this.height = height;
         this.isRunning = false;
-        this.bckgFrames = Const.TOTAL_BACKGROUND_FRAMES;
+        this.backgroundFrames = Const.TOTAL_BACKGROUND_FRAMES;
         this.delay = Const.DELAY;
-        this.isKeyUpOrDownMenu = false;
-        this.isNewGame = true;
+        this.inMenu = true;
         this.isModeSelected = false;
         this.menu = new Menu();
     }
@@ -80,22 +84,23 @@ public class Game implements Runnable {
         if (StateManager.getState() != null) {
             StateManager.getState().tick();
         }
-        this.bckgFrames--;
-        if (this.bckgFrames == 0) {
-            this.bckgFrames = Const.TOTAL_BACKGROUND_FRAMES;
+        this.backgroundFrames--;
+        if (this.backgroundFrames == 0) {
+            this.backgroundFrames = Const.TOTAL_BACKGROUND_FRAMES;
         }
-
+//Check all changed variables for the player
         player.tick();
         long elapsed = (System.nanoTime() - time) / Const.DRAWING_DELAY;
-
-        if (elapsed > this.delay  && Road.isSpotAvailable() ) {
+//Check if enough time is passed to add new enemy or if spawnSpot is available
+        if (elapsed > this.delay && Road.isSpotAvailable()) {
             enemies.add(new Enemy());
             time = System.nanoTime();
         }
+//Loop for checking all changed variables for the enemies and check if they intersects with the player
         for (int j = 0; j < enemies.size(); j++) {
             enemies.get(j).tick();
-            enemy = enemies.get(j).getEnemyRectangle();
-            if(player.getBoundingBox().intersects(enemy)){
+            enemyBoundingBox = enemies.get(j).getEnemyRectangle();
+            if (player.getBoundingBox().intersects(enemyBoundingBox)) {
                 Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(enemies.get(j).getX())] = false;
                 enemies.remove(j);
                 player.setLives(player.getLives() - 1);
@@ -105,8 +110,6 @@ public class Game implements Runnable {
 
     //Method for drawing everything on the canvas
     private void render() throws IOException {
-        // Bool is for determing wich background to draw.
-        boolean isFirstBckg = true;
         //Setting the bufferStrategy to be the one used in our canvas.
         //Gets the number of buffers that the canvas should use.
         this.bufferStrategy = display.getCanvas().getBufferStrategy();
@@ -120,11 +123,9 @@ public class Game implements Runnable {
         //Create the graphics related to the bufferStrategy
         this.graphics = this.bufferStrategy.getDrawGraphics();
         //Create and draw the animated background
-        this.graphics.drawImage(this.background.crop(0, 0 + this.bckgFrames * this.height, width, height), 0, 0, null);
+        this.graphics.drawImage(this.background.crop(0, 0 + this.backgroundFrames * this.height, width, height), 0, 0, null);
         //Player Added
         player.render(this.graphics);
-        //Enemy Added(for test)
-        // this.graphics.drawImage(Assets.blackCar, 480, 420, null);
         //Enables the buffer
         for (int j = 0; j < enemies.size(); j++) {
             enemies.get(j).render(this.graphics);
@@ -161,7 +162,7 @@ public class Game implements Runnable {
                 delta--;
             }
             if (isModeSelected) {
-                if (isNewGame) {
+                if (inMenu) {
                     isRunning = true;
                     break;
                 } else {
@@ -185,8 +186,6 @@ public class Game implements Runnable {
                 delta--;
 
             }
-
-
         }
         //Calls the stop method to stop everything
         this.stop();
@@ -224,23 +223,14 @@ public class Game implements Runnable {
         }
         this.graphics = this.bufferStrategy.getDrawGraphics();
 
-        this.graphics.drawImage(this.background.crop(0, 0 + this.bckgFrames * this.height, width, height), 0, 0, null);
-        //Logic for the game buttons.
-        if (isNewGame) {
-            if (isKeyUpOrDownMenu) {
-                isNewGame = false;
-                menu.render(graphics,isNewGame);
-            } else {
-                menu.render(graphics,isNewGame);
-            }
+        this.graphics.drawImage(this.background.crop(0, 0 + this.backgroundFrames * this.height, width, height), 0, 0, null);
+        //Check if you pressed enter to start the game or quit and what button is pressed to navigate the menu
+        if (inMenu) {
+            menu.tick();
         } else {
-            if (isKeyUpOrDownMenu) {
-                isNewGame = true;
-                menu.render(graphics,isNewGame);
-            } else {
-                menu.render(graphics,isNewGame);
-            }
+            menu.tick();
         }
+        menu.render(graphics, inMenu);
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
         this.graphics.dispose();
