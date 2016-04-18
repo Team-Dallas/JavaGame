@@ -133,6 +133,13 @@ public class Game implements Runnable {
         if (StateManager.getState() != null) {
             StateManager.getState().render(this.graphics);
         }
+        //Creating life and score stats.
+        this.graphics.setFont(new Font("Need for Font",Font.PLAIN,18));
+        this.graphics.setColor(Color.RED);
+        this.graphics.drawString(String.format("LIVES: %d",player.getLives()),60,30);
+        this.graphics.setColor(Color.orange);
+        this.graphics.drawString(String.format("SCORE: %d",player.getScore()),600,30);
+
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
         this.graphics.dispose();
