@@ -1,5 +1,6 @@
 package ImageLoader;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +8,8 @@ import java.util.Random;
 
 public class Assets {
     public static BufferedImage player, blackCar, taxi, pickUp, camaro, bus;
-    private static ArrayList<BufferedImage> allEnemies ;
+
+    private static ArrayList<BufferedImage> allEnemies;
 
     public static ArrayList<BufferedImage> getAllEnemies() {
         return allEnemies;
@@ -28,8 +30,18 @@ public class Assets {
             allEnemies.add(pickUp);
             allEnemies.add(camaro);
             allEnemies.add(bus);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+    public static BufferedImage load(String path) {
+        try {
+            return ImageIO.read(Assets.class.getResource(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

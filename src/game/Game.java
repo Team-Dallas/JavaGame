@@ -34,10 +34,7 @@ public class Game implements Runnable {
     public static Player player;
     private ArrayList<Enemy> enemies;
     private static Rectangle enemyBoundingBox;
-    //Check if you are in the menu and what field is pressed
-    public static boolean inMenu;
-    public static boolean isModeSelected;
-    public static Menu menu;
+
 
     private State gameState;
 
@@ -55,9 +52,6 @@ public class Game implements Runnable {
         this.isRunning = false;
         this.backgroundFrames = Const.TOTAL_BACKGROUND_FRAMES;
         this.delay = Const.DELAY;
-        this.inMenu = true;
-        this.isModeSelected = false;
-        this.menu = new Menu();
     }
 
     /**
@@ -133,13 +127,6 @@ public class Game implements Runnable {
         if (StateManager.getState() != null) {
             StateManager.getState().render(this.graphics);
         }
-        //Creating life and score stats.
-        this.graphics.setFont(new Font("Need for Font",Font.PLAIN,18));
-        this.graphics.setColor(Color.RED);
-        this.graphics.drawString(String.format("LIVES: %d",player.getLives()),60,30);
-        this.graphics.setColor(Color.orange);
-        this.graphics.drawString(String.format("SCORE: %d",player.getScore()),600,30);
-
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
         this.graphics.dispose();
@@ -159,25 +146,6 @@ public class Game implements Runnable {
         long now;
         long lastTimeTicked = System.nanoTime();
 
-        while (true) {
-            now = System.nanoTime();
-            delta += (now - lastTimeTicked) / ticksPerFrame;
-            lastTimeTicked = now;
-            if (delta > 0) {
-                renderMenu();
-                tick();
-                delta--;
-            }
-            if (isModeSelected) {
-                if (inMenu) {
-                    isRunning = true;
-                    break;
-                } else {
-                    isRunning = false;
-                    break;
-                }
-            }
-        }
 
         while (isRunning) {
             now = System.nanoTime();
@@ -220,26 +188,4 @@ public class Game implements Runnable {
         System.exit(0);
     }
 
-    //Method for the Game menu.
-    private void renderMenu() {
-        this.bufferStrategy = display.getCanvas().getBufferStrategy();
-        if (bufferStrategy == null) {
-            //Create 2 buffers and then return out of the method to prevent errors
-            display.getCanvas().createBufferStrategy(2);
-            return;
-        }
-        this.graphics = this.bufferStrategy.getDrawGraphics();
-
-        this.graphics.drawImage(this.background.crop(0, 0 + this.backgroundFrames * this.height, width, height), 0, 0, null);
-        //Check if you pressed enter to start the game or quit and what button is pressed to navigate the menu
-        if (inMenu) {
-            menu.tick();
-        } else {
-            menu.tick();
-        }
-        menu.render(graphics, inMenu);
-        bufferStrategy.show();
-        //Shows everything stored in the Graphics object
-        this.graphics.dispose();
-    }
 }

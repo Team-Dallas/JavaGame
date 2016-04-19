@@ -29,7 +29,6 @@ public class Menu {
             g.setColor(Color.red);
             g.drawString("QUIT", quitButton.x + 10, quitButton.y + 35);
         }
-
     }
 
     public void tick() {

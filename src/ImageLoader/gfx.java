@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class gfx {
     public static BufferedImage loader(String path) throws IOException {
+
         return ImageIO.read(gfx.class.getResource(path));
     }
 }

@@ -10,7 +10,6 @@ public class Player {
     private int velocity;
     private int width, height;
     private int lives;
-    private int score;
 
     private Rectangle boundingBox;
 
@@ -27,7 +26,6 @@ public class Player {
         this.velocity = Const.PLAYER_VELOCITY;
         this.lives = Const.LIVES;
         this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
-        this.score = 0;
 
     }
 
@@ -42,8 +40,6 @@ public class Player {
     public void setLives(int lives) {
         this.lives = lives;
     }
-
-    public int getScore() {return this.score;}
 
     public void tick() {
         //Update the bounding box's position
