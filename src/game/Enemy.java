@@ -60,7 +60,7 @@ public class Enemy {
 
     public void render(Graphics g) {
         int allEnemiesCount = Assets.getAllEnemies().size();
-        if (this.y == Const.ENEMY_END_POINT_Y - 100) {
+        if (this.y >= Const.ENEMY_END_POINT_Y - 100) {
             Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(this.x)] = false;
         }
         if (this.y == Const.ENEMY_START_POINT_Y + this.velocity) {

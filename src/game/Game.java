@@ -94,15 +94,16 @@ public class Game implements Runnable {
 //Loop for checking all changed variables for the enemies and check if they intersects with the player
         for (int j = 0; j < enemies.size(); j++) {
             enemies.get(j).tick();
-            if(enemies.get(j).getY() > this.height){
+            if(enemies.get(j).getY() > Const.ROAD_BOTTOM_BORDER + 200){
                 Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(enemies.get(j).getX())] = false;
+                player.setScore(player.getScore() + 50);
                 enemies.remove(j);
                 continue;
             }
             enemyBoundingBox = enemies.get(j).getEnemyRectangle();
             if (player.getBoundingBox().intersects(enemyBoundingBox)) {
                 reset();
-                if(player.getLives() == -1){
+                if(player.getLives() == 0){
                     stop();
                 }
                 break;

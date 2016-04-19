@@ -53,9 +53,13 @@ public class Player {
 
     public int getScore() {return this.score;}
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public void tick() {
         //Update the bounding box's position
-        this.score++;
+
         if (goingUp && this.y > Const.ROAD_TOP_BORDER) {
             this.y -= this.velocity;
         }
