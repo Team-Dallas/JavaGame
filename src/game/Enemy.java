@@ -10,6 +10,7 @@ import java.util.Random;
 public class Enemy {
     private int x, y;
     private int velocity;
+    private static int difficulty;
     private int width, height;
     private Random rand;
     private int randomIndex;
@@ -25,7 +26,8 @@ public class Enemy {
         this.y = Const.ENEMY_START_POINT_Y;
         this.width = Const.ENEMY_WIDTH;
         this.height = Const.ENEMY_HEIGHT;
-        this.velocity = Const.ENEMY_VELOCITY;
+        this.difficulty = Game.player.getScore() / 500;
+        this.velocity = Const.ENEMY_VELOCITY + difficulty;
         this.enemyRectangle = new Rectangle(this.x, this.y, this.width, this.height);
     }
 
@@ -33,10 +35,16 @@ public class Enemy {
         return x;
     }
 
+    public int getY() {
+        return y;
+    }
     public Rectangle getEnemyRectangle() {
         return this.enemyRectangle;
     }
 
+    public static int getDifficulty() {
+        return difficulty;
+    }
 
     public void setRandomIndex(int randomIndex) {
         do {
@@ -46,13 +54,13 @@ public class Enemy {
     }
 
     public void tick() {
-        this.y += this.velocity;
+        this.y += this.velocity ;
         this.enemyRectangle.setBounds(this.x, this.y, this.width, this.height);
     }
 
     public void render(Graphics g) {
         int allEnemiesCount = Assets.getAllEnemies().size();
-        if (this.y == Const.ENEMY_END_POINT_X) {
+        if (this.y == Const.ENEMY_END_POINT_Y - 100) {
             Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(this.x)] = false;
         }
         if (this.y == Const.ENEMY_START_POINT_Y + this.velocity) {

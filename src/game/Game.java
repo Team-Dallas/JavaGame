@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 public class Game implements Runnable {
     private String title;
@@ -84,20 +85,27 @@ public class Game implements Runnable {
         }
 //Check all changed variables for the player
         player.tick();
-        long elapsed = (System.nanoTime() - time) / Const.DRAWING_DELAY;
+        long elapsed = (System.nanoTime() - time) / (Const.DRAWING_DELAY - (4000 * Enemy.getDifficulty()));
 //Check if enough time is passed to add new enemy or if spawnSpot is available
-        if (elapsed > this.delay && Road.isSpotAvailable()) {
+        if (elapsed > (this.delay - Enemy.getDifficulty() * 300)&& Road.isSpotAvailable()) {
             enemies.add(new Enemy());
             time = System.nanoTime();
         }
 //Loop for checking all changed variables for the enemies and check if they intersects with the player
         for (int j = 0; j < enemies.size(); j++) {
             enemies.get(j).tick();
-            enemyBoundingBox = enemies.get(j).getEnemyRectangle();
-            if (player.getBoundingBox().intersects(enemyBoundingBox)) {
+            if(enemies.get(j).getY() > this.height){
                 Road.getOccupiedSpawnPoints()[Const.SPAWN_POINTS.indexOf(enemies.get(j).getX())] = false;
                 enemies.remove(j);
-                player.setLives(player.getLives() - 1);
+                continue;
+            }
+            enemyBoundingBox = enemies.get(j).getEnemyRectangle();
+            if (player.getBoundingBox().intersects(enemyBoundingBox)) {
+                reset();
+                if(player.getLives() == 0){
+                    stop();
+                }
+                break;
             }
         }
     }
@@ -127,6 +135,14 @@ public class Game implements Runnable {
         if (StateManager.getState() != null) {
             StateManager.getState().render(this.graphics);
         }
+        //Creating life and score stats.
+        this.graphics.setFont(new Font("Need for Font",Font.PLAIN,18));
+        this.graphics.setColor(Color.RED);
+        this.graphics.drawString(String.format("LIVES: %d",player.getLives()),60,30);
+        this.graphics.setColor(Color.BLUE);
+        this.graphics.drawString(String.format("DIFFICULTY LEVEL: %d",Enemy.getDifficulty()),300,30);
+        this.graphics.setColor(Color.orange);
+        this.graphics.drawString(String.format("SCORE: %d",player.getScore()),600,30);
         bufferStrategy.show();
         //Shows everything stored in the Graphics object
         this.graphics.dispose();
@@ -186,6 +202,14 @@ public class Game implements Runnable {
             e.printStackTrace();
         }
         System.exit(0);
+    }
+
+    private void reset() {
+        Road.setOccupiedSpawnPoints(new boolean[4]);
+        enemies.clear();
+        player.setX(Const.PLAYER_START_POINT_X);
+        player.setY(Const.PLAYER_START_POINT_Y);
+        player.setLives(player.getLives() - 1);
     }
 
 }
