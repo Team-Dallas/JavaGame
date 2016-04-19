@@ -102,7 +102,7 @@ public class Game implements Runnable {
             enemyBoundingBox = enemies.get(j).getEnemyRectangle();
             if (player.getBoundingBox().intersects(enemyBoundingBox)) {
                 reset();
-                if(player.getLives() == 0){
+                if(player.getLives() == -1){
                     stop();
                 }
                 break;
