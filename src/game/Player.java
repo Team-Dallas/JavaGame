@@ -31,6 +31,14 @@ public class Player {
 
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public Rectangle getBoundingBox() {
         return boundingBox;
     }
@@ -44,6 +52,10 @@ public class Player {
     }
 
     public int getScore() {return this.score;}
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     public void tick() {
         //Update the bounding box's position

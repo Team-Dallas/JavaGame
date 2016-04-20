@@ -1,6 +1,7 @@
 package game;
 
 import display.Display;
+import display.MenuScreen;
 
 /**
  * Class for launching the game
@@ -8,6 +9,7 @@ import display.Display;
 public class Launcher {
     public static void main(String[] args) {
         Game game = new Game("BULGARIAN TRAFFIC", 800, 600);
-        game.start();
+        MenuScreen menuScreen = new MenuScreen(game);
+        menuScreen.setVisible(true);
     }
 }

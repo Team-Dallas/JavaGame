@@ -23,11 +23,11 @@ public class InputHandler implements KeyListener{
 
         if (keyCode == KeyEvent.VK_UP) {
             Player.goingUp = true;
-            Menu.goingUp = true;
+
         }
         if (keyCode == KeyEvent.VK_DOWN) {
             Player.goingDown = true;
-            Menu.goingDown = true;
+
         }
         if (keyCode == KeyEvent.VK_LEFT) {
             Player.goingLeft = true;
@@ -38,9 +38,8 @@ public class InputHandler implements KeyListener{
         if (keyCode == KeyEvent.VK_ESCAPE) {
             System.exit(0);
         }if (keyCode == KeyEvent.VK_ENTER){
-            isModeSelected = true;
-        }
 
+        }
     }
 
     @Override
@@ -49,11 +48,11 @@ public class InputHandler implements KeyListener{
 
         if (keyCode == KeyEvent.VK_UP) {
             Player.goingUp = false;
-            Menu.goingUp = false;
+
         }
         if (keyCode == KeyEvent.VK_DOWN) {
             Player.goingDown = false;
-            Menu.goingDown = false;
+
         }
         if (keyCode == KeyEvent.VK_LEFT) {
             Player.goingLeft = false;
@@ -61,7 +60,7 @@ public class InputHandler implements KeyListener{
         if (keyCode == KeyEvent.VK_RIGHT) {
             Player.goingRight = false;
         }if (keyCode == KeyEvent.VK_ENTER){
-            isModeSelected = false;
+
         }
     }
 }
