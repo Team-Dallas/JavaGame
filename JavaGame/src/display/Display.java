@@ -57,4 +57,8 @@ public class Display extends Canvas {
     public Canvas getCanvas() {
         return canvas;
     }
+
+    public void closeCanvas(){
+        this.frame.dispose();
+    }
 }
