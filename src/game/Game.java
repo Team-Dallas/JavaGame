@@ -5,9 +5,11 @@ import ImageLoader.Assets;
 import ImageLoader.SpriteSheet;
 import ImageLoader.gfx;
 import display.Display;
+import display.GameOverScreen;
 import states.GameState;
 import states.State;
 import states.StateManager;
+import utilities.HighScore;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -104,7 +106,7 @@ public class Game implements Runnable {
             if (player.getBoundingBox().intersects(enemyBoundingBox)) {
                 reset();
                 if(player.getLives() == 0){
-                    stop();
+                    gameOver();
                 }
                 break;
             }
@@ -137,7 +139,7 @@ public class Game implements Runnable {
             StateManager.getState().render(this.graphics);
         }
         //Creating life and score stats.
-        this.graphics.setFont(new Font("Need for Font",Font.PLAIN,18));
+        this.graphics.setFont(new Font("Verdana", Font.BOLD, 22));
         this.graphics.setColor(Color.RED);
         this.graphics.drawString(String.format("LIVES: %d",player.getLives()),60,30);
         this.graphics.setColor(Color.BLUE);
@@ -203,6 +205,15 @@ public class Game implements Runnable {
             e.printStackTrace();
         }
         System.exit(0);
+    }
+
+    private void gameOver() {
+
+        HighScore.writeHighscore(this.player.getScore());
+        this.display.closeCanvas();
+
+        new GameOverScreen();
+        stop();
     }
 
     private void reset() {
