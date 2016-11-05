@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 public class Game implements Runnable {
+	
+	
+	
     private String title;
     private int width;
     private int height;
